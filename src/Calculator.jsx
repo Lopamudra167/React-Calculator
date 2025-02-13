@@ -10,30 +10,43 @@ const Calculator = () =>{
                     ['1','2','3','*'],
                     ['C','0','=','/']
                                         ];
-    const handleButtonClick = (value) =>{
-        if(value === 'C'){
+
+    const handleButtonClick = (value) => {
+        if (value === 'C') {
             setInput('');
             setOutput('');
-        }else if(value === '='){
+        } else if (value === '=') {
             handleEvaluate();
-        }else{
-            setInput(input + value);
+        } else {
+            setInput((prevInput) => prevInput + value);
         }
     };
-    const handleEvaluate =() =>{
-        try{
-            const result = eval(input);
-            if(result===Infinity){
-                setOutput('Infinity')
-            }else if(isNaN(result)){
-                setOutput('Infinity')
-            }else{
-                setOutput(result);
+
+    const handleEvaluate = () => {
+        if (!input || /[+\-*/]$/.test(input)) {  
+            setOutput("Error");
+            return;
+        }
+
+        try {
+            // Check for 0/0 case before eval
+            if (input === "0/0") {
+                setOutput("NaN");
+                return;
             }
-        }catch(Error){
-            setOutput(`Error:${Error}`)
+
+            // Evaluate safely
+            const result = eval(input);
+            if (!isFinite(result)) {
+                setOutput("Infinity");
+            } else {
+                setOutput(result.toString());
+            }
+        } catch (error) {
+            setOutput(`Error;${error}`);
         }
     };
+
 
     return(
         <>
