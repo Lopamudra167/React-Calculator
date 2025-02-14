@@ -29,15 +29,12 @@ const Calculator = () =>{
         }
 
         try {
-            // Check for 0/0 case before eval
-            if (input === "0/0") {
-                setOutput("NaN");
-                return;
-            }
-
-            // Evaluate safely
             const result = eval(input);
-            if (!isFinite(result)) {
+
+            // Handle 0/0 or any undefined cases properly
+            if (Number.isNaN(result)) {
+                setOutput("NaN");
+            } else if (!isFinite(result)) {
                 setOutput("Infinity");
             } else {
                 setOutput(result.toString());
